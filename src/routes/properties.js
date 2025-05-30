@@ -5,6 +5,9 @@ import getPropertyById from "../services/properties/getPropertyById.js";
 import deletePropertyById from "../services/properties/deleteProperty.js";
 import updatePropertyById from "../services/properties/updatePropertyById.js";
 import getPropertyBookings from "../services/properties/getPropertyBookings.js";
+import getPropertyByAmenities from "../services/properties/getPropertyByAmenities.js";
+import getPropertyHost from "../services/properties/getPropertyHost.js";
+//import getPropertyReviews from "..services/properties/getPropertyReviews.js";
 import authMiddleware from "../middleware/auth.js";
 import notFoundErrorHandler from "../middleware/notFoundErrorHandler.js";
 
@@ -25,9 +28,57 @@ router.get(
   notFoundErrorHandler
 );
 
+router.get(
+  "/:id/amenities",
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const propertyByAmenities = await getPropertyByAmenities(id);
+
+      res.status(200).json(propertyByAmenities);
+    } catch (error) {
+      next(error);
+    }
+  },
+  notFoundErrorHandler
+);
+
+router.get(
+  "/:id/hosts",
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const propertyHost = await getPropertyHost(id);
+
+      res.status(200).json(propertyHost);
+    } catch (error) {
+      next(error);
+    }
+  },
+  notFoundErrorHandler
+);
+
+// router.get(
+//   "/:id/reviews",
+//   async (req, res, next) => {
+//     try {
+//       const { id } = req.params;
+//       const propertyReviews = await getPropertyReviews(id);
+
+//       res.status(200).json(propertyReviews);
+//     } catch (error) {
+//       next(error);
+//     }
+//   },
+//   notFoundErrorHandler
+// );
+
 router.get("/", async (req, res, next) => {
   try {
-    const properties = await getProperties();
+    const { location, pricePerNight } = req.query;
+    console.log("location:", location);
+    console.log("pricePerNight:", pricePerNight);
+    const properties = await getProperties(location, pricePerNight);
     res.json(properties);
   } catch (error) {
     next(error);
@@ -43,7 +94,7 @@ router.post("/", authMiddleware, async (req, res, next) => {
       location,
       pricePerNight,
       bedroomCount,
-      bathroomCount,
+      bathRoomCount,
       maxGuestCount,
       rating,
     } = req.body;
@@ -54,7 +105,7 @@ router.post("/", authMiddleware, async (req, res, next) => {
       location,
       pricePerNight,
       bedroomCount,
-      bathroomCount,
+      bathRoomCount,
       maxGuestCount,
       rating
     );
@@ -112,18 +163,18 @@ router.put(
         location,
         pricePerNight,
         bedroomCount,
-        bathroomCount,
+        bathRoomCount,
         maxGuestCount,
         rating,
       } = req.body;
-      const user = await updatePropertyById(id, {
+      const property = await updatePropertyById(id, {
         hostId,
         title,
         description,
         location,
         pricePerNight,
         bedroomCount,
-        bathroomCount,
+        bathRoomCount,
         maxGuestCount,
         rating,
       });

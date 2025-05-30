@@ -1,31 +1,47 @@
-import { PrismaClient } from '@prisma/client'
-import NotFoundError from '../../errors/notFoundError.js';
+import { PrismaClient } from "@prisma/client";
+//import NotFoundError from "../../errors/notFoundError.js";
 
-const updateHostById = async (id, username, password, name, email, phoneNumber, profilePicture, aboutMe, listings) => {
-  const prisma = new PrismaClient()
-  const updatedHost = await prisma.host.updateMany({
+const updateHostById = async (
+  id,
+  username,
+  password,
+  name,
+  email,
+  phoneNumber,
+  profilePicture,
+  aboutMe,
+  listings
+) => {
+  const prisma = new PrismaClient();
+  const hostExist = await prisma.host.findUnique({
+    where: { id },
+  });
+  if (!hostExist || hostExist.count === 0) {
+    return null;
+  }
+  const host = await prisma.host.updateMany({
     where: {
-      id
+      id,
     },
     data: {
-      username, 
-      password, 
-      name, 
-      email, 
-      phoneNumber, 
-      profilePicture, 
-      aboutMe, 
-      listings
-    }
-  })
+      username,
+      password,
+      name,
+      email,
+      phoneNumber,
+      profilePicture,
+      aboutMe,
+      listings,
+    },
+  });
 
-  if (!updatedHost || updatedHost.count === 0) {
-    throw new NotFoundError('Host', id)
+  if (!host || host.count === 0) {
+    return null;
   }
 
   return {
-    message: `Host with id ${id} was updated!`
-  }
-}
+    message: `Host with id ${id} was updated!`,
+  };
+};
 
-export default updateHostById
+export default updateHostById;

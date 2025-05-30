@@ -38,28 +38,37 @@ async function main() {
     });
   }
   for (const booking of bookings) {
-    console.log(booking.id),
-      console.log(booking.totalPrice),
-      await prisma.booking.upsert({
-        where: { id: booking.id },
-        update: {},
-        create: {
-          id: booking.id,
-          userId: booking.userId,
-          propertyId: booking.propertyId,
-          checkinDate: booking.checkinDate,
-          checkoutDate: booking.checkoutDate,
-          numberOfGuests: booking.numberOfGuests,
-          totalPrice: booking.totalPrice,
-          bookingStatus: booking.bookingStatus,
-        },
-      });
+    await prisma.booking.upsert({
+      where: { id: booking.id },
+      update: {},
+      create: {
+        id: booking.id,
+        userId: booking.userId,
+        propertyId: booking.propertyId,
+        checkinDate: booking.checkinDate,
+        checkoutDate: booking.checkoutDate,
+        numberOfGuests: booking.numberOfGuests,
+        totalPrice: booking.totalPrice,
+        bookingStatus: booking.bookingStatus,
+      },
+    });
   }
   for (const property of properties) {
     await prisma.property.upsert({
       where: { id: property.id },
       update: {},
-      create: property,
+      create: {
+        id: property.id,
+        hostId: property.hostId,
+        title: property.title,
+        description: property.description,
+        location: property.location,
+        pricePerNight: property.pricePerNight,
+        bedroomCount: property.bedroomCount,
+        bathRoomCount: property.bathRoomCount,
+        maxGuestCount: property.maxGuestCount,
+        rating: property.rating,
+      },
     });
   }
   for (const host of hosts) {

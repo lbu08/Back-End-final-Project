@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import NotFoundError from "../../errors/notFoundError.js";
+//import NotFoundError from "../../errors/notFoundError.js";
 
 const deleteReviewById = async (id) => {
   const prisma = new PrismaClient();
@@ -14,7 +14,7 @@ const deleteReviewById = async (id) => {
   });
 
   if (!review || review.count === 0) {
-    throw new NotFoundError("Review", id);
+    return null;
   }
   return id;
 };

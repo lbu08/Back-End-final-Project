@@ -109,7 +109,8 @@ router.put(
         aboutMe,
         listings,
       } = req.body;
-      const host = await updateHostById(id, {
+      const host = await updateHostById(
+        id,
         username,
         password,
         name,
@@ -117,8 +118,8 @@ router.put(
         phoneNumber,
         profilePicture,
         aboutMe,
-        listings,
-      });
+        listings
+      );
 
       if (host) {
         res.status(200).send({

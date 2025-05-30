@@ -1,18 +1,18 @@
-import { PrismaClient } from '@prisma/client';
-import NotFoundError from '../../errors/notFoundError.js';
+import { PrismaClient } from "@prisma/client";
+//import NotFoundError from '../../errors/notFoundError.js';
 
-const getHostProperties = async (hostId) => {
+const getHostProperties = async (id) => {
   const prisma = new PrismaClient();
   const hostProperties = await prisma.host.findUnique({
     where: {
-      id: hostId,
+      id: id,
     },
     include: {
       properties: true,
     },
   });
   if (!hostProperties) {
-    throw new NotFoundError('Host', hostId);
+    return null;
   }
   return hostProperties;
 };

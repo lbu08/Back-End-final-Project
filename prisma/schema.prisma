@@ -34,8 +34,8 @@ model Review {
   rating     Int
   comment    String
 
-  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  properties Property @relation(fields: [propertyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([propertyId])
   @@index([userId])
@@ -45,7 +45,7 @@ model Amenity {
   id   String @id @default(uuid())
   name String
 
-  property Property[]
+  properties Property []
 }
 
 model Host {
@@ -72,15 +72,14 @@ model Property {
   maxGuestCount Int
   rating        Int
 
-  //host Host []
-
-  host    Host      @relation(fields: [hostId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  host    Host @relation(fields: [hostId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   amenities Amenity[]
 
   reviews  Review[]
-  booking Booking[]
+  bookings Booking[]
 
   @@index([hostId])
+  
 }
 
 model Booking {
@@ -94,7 +93,9 @@ model Booking {
   bookingStatus  String
 
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  properties Property @relation(fields: [propertyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
 
   @@index([userId])
   @@index([propertyId])

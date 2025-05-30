@@ -4,6 +4,7 @@ import createAmenity from "../services/amenities/createAmenity.js";
 import getAmenityById from "../services/amenities/getAmenityById.js";
 import deleteAmenityById from "../services/amenities/deleteAmenity.js";
 import updateAmenityById from "../services/amenities/updateAmenityById.js";
+import getAmenitiesByProperties from "../services/amenities/getAmenitiesByProperties.js";
 import authMiddleware from "../middleware/auth.js";
 import notFoundErrorHandler from "../middleware/notFoundErrorHandler.js";
 
@@ -17,6 +18,21 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+router.get(
+  "/:id/properties",
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const amenitiesByProperties = await getAmenitiesByProperties(id);
+
+      res.status(200).json(amenitiesByProperties);
+    } catch (error) {
+      next(error);
+    }
+  },
+  notFoundErrorHandler
+);
 
 router.post("/", authMiddleware, async (req, res, next) => {
   try {
@@ -70,7 +86,7 @@ router.put(
     try {
       const { id } = req.params;
       const { name } = req.body;
-      const updatedAmenity = await updateAmenityById(id, { name });
+      const amenity = await updateAmenityById(id, { name });
 
       if (amenity) {
         res.status(200).send({

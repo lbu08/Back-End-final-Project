@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import NotFoundError from "../../errors/notFoundError.js";
+//import NotFoundError from "../../errors/notFoundError.js";
 
 const getBookingById = async (id) => {
   console.log("getBookingById function");
@@ -13,10 +13,8 @@ const getBookingById = async (id) => {
   console.log("booking value in getBookingById", booking);
 
   if (!booking) {
-    throw new NotFoundError("Booking", id);
   }
-
-  return booking;
+  return null;
 };
 
 export default getBookingById;

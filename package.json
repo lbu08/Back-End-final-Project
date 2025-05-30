@@ -19,6 +19,7 @@
     "@prisma/client": "^6.8.2",
     "@sentry/cli": "^2.45.0",
     "@sentry/node": "^7.120.3",
+    "@sentry/vite-plugin": "^3.5.0",
     "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
@@ -26,9 +27,10 @@
     "winston": "^3.17.0"
   },
   "devDependencies": {
-    "newman": "^6.0.0",
+    "newman": "^6.2.1",
     "nodemon": "^3.0.1",
-    "prisma": "^6.8.2"
+    "prisma": "^6.8.2",
+    "vitest": "^3.1.4"
   },
   "engines": {
     "node": ">=18 <19"

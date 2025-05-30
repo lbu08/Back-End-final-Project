@@ -1,6 +1,5 @@
-import { PrismaClient } from '@prisma/client';
-import NotFoundError from '../../errors/notFoundError.js';
-
+import { PrismaClient } from "@prisma/client";
+//import NotFoundError from '../../errors/notFoundError.js';
 
 const getUserReviews = async (userId) => {
   const prisma = new PrismaClient();
@@ -13,11 +12,9 @@ const getUserReviews = async (userId) => {
     },
   });
   if (!userReviews) {
-    throw new NotFoundError('User', userId);
+    return null;
   }
   return userReviews;
 };
 
 export default getUserReviews;
-
- 

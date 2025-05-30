@@ -5,6 +5,7 @@ import getBookingById from "../services/bookings/getBookingById.js";
 import deleteBookingById from "../services/bookings/deleteBooking.js";
 import updateBookingById from "../services/bookings/updateBookingById.js";
 import getBookingProperties from "../services/bookings/getBookingProperties.js";
+//import getBookingByUser from "../services/bookings/getBookingByUser.js";
 import authMiddleware from "../middleware/auth.js";
 import notFoundErrorHandler from "../middleware/notFoundErrorHandler.js";
 
@@ -25,8 +26,26 @@ router.get(
   notFoundErrorHandler
 );
 
+// router.get(
+//   "/:id/users",
+//   async (req, res, next) => {
+//     try {
+//       const { id } = req.params;
+//       const bookingByUser = await getBookingByUser(id);
+
+//       res.status(200).json(bookingByUser);
+//     } catch (error) {
+//       next(error);
+//     }
+//   },
+//   notFoundErrorHandler
+// );
+
 router.get("/", async (req, res, next) => {
   try {
+    const { userId } = req.query;
+    console.log("location:", location);
+    console.log("pricePerNight:", pricePerNight);
     const bookings = await getBookings();
     res.json(bookings);
   } catch (error) {
@@ -64,6 +83,7 @@ router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const booking = await getBookingById(id);
+    console.log(id);
 
     console.log("getBookingById function");
     console.log("id in getBookingById:", id);

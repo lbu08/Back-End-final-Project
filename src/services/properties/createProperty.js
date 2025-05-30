@@ -7,25 +7,23 @@ const createProperty = async (
   location,
   pricePerNight,
   bedroomCount,
-  bathroomCount,
+  bathRoomCount,
   maxGuestCount,
-  rating,
+  rating
 ) => {
   const prisma = new PrismaClient();
   const property = await prisma.property.create({
     data: {
-      hostId: {
-        connect: { id: hostId },
-      },
+      hostId,
       title,
       description,
       location,
       pricePerNight,
       bedroomCount,
-      bathroomCount,
+      bathRoomCount,
       maxGuestCount,
       rating,
-      },
+    },
   });
 
   return property;

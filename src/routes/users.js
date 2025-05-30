@@ -43,7 +43,11 @@ router.get(
 
 router.get("/", async (req, res, next) => {
   try {
-    const users = await getUsers();
+    const { username, email, name } = req.query;
+    console.log("username", username);
+    console.log("email", email);
+    console.log("name", name);
+    const users = await getUsers(username, email, name);
     res.json(users);
   } catch (error) {
     next(error);
@@ -111,14 +115,15 @@ router.put(
       const { id } = req.params;
       const { username, password, name, email, phoneNumber, profilePicture } =
         req.body;
-      const user = await updateUserById(id, {
+      const user = await updateUserById(
+        id,
         username,
         password,
         name,
         email,
         phoneNumber,
-        profilePicture,
-      });
+        profilePicture
+      );
 
       if (user) {
         res.status(200).send({

@@ -1,16 +1,22 @@
 import { PrismaClient } from "@prisma/client";
-import NotFoundError from "../../errors/notFoundError.js";
+//import NotFoundError from "../../errors/notFoundError.js";
 
 const deletePropertyById = async (id) => {
   const prisma = new PrismaClient();
+  const propertyExist = await prisma.property.findUnique({
+    where: { id },
+  });
+  if (!propertyExist || propertyExist.count === 0) {
+    return null;
+  }
   const property = await prisma.property.deleteMany({
     where: { id },
   });
 
-  if (!deletePropertyById || deletePropertyById.count === 0) {
-      throw new NotFoundError('Property', id)
-    }
-    return id 
-  };
+  if (!property || property.count === 0) {
+    return null;
+  }
+  return id;
+};
 
 export default deletePropertyById;

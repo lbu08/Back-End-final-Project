@@ -16,7 +16,7 @@ const app = express();
 
 // Sentry
 Sentry.init({
-  dsn: "https://f2c4cca0d380aa32ebaa75e0b37154af@o4509071441657856.ingest.de.sentry.io/4509387775410256",
+  dsn: "https://5e1e0cff3578d00041a27463e9dbddc8@o4509071441657856.ingest.de.sentry.io/4509387777966160",
   integrations: [
     //     // enable HTTP calls tracing
     new Sentry.Integrations.Http({ tracing: true }),
