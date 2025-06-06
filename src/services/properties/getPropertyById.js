@@ -12,9 +12,7 @@ const getPropertyById = async (id) => {
 
   console.log("property value in getPropertyById", property);
 
-  if (!property) {
-    return null;
-  }
+  if (!property) return null;
 
   return property;
 };

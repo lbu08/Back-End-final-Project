@@ -10,6 +10,14 @@ const createAmenity = async (name) => {
     data: newAmenity,
   });
   return amenity;
+
+  if (!amenity) {
+    res
+      .status(404)
+      .json({ message: `Something went wrong, new amenity was not created!` });
+  } else {
+    res.status(200).json(amenity);
+  }
 };
 
 export default createAmenity;

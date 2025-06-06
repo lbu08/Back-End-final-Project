@@ -53,8 +53,19 @@ router.get(
 router.post("/", authMiddleware, async (req, res, next) => {
   try {
     const { userId, propertyId, rating, comment } = req.body;
+    if (!userId || !propertyId || !rating || !comment) {
+      res.status(400).json({ message: `Bad request` });
+    } else {
     const newReview = await createReview(userId, propertyId, rating, comment);
-    res.status(201).json(newReview);
+
+    // if (!newReview) {
+    //   res
+    //     .status(404)
+    //     .json({ message: `Something went wrong, new review was not created!` });
+    // } else {
+      res.status(201).json(newReview);
+    // }
+  }
   } catch (error) {
     next(error);
   }
@@ -78,16 +89,19 @@ router.get("/:id", async (req, res, next) => {
 router.delete("/:id", authMiddleware, async (req, res, next) => {
   try {
     const { id } = req.params;
+    // if (!id) {
+    //   res.status(404).json({ message: `Not found` });
+    // }
     const review = await deleteReviewById(id);
 
-    if (review) {
+    if (!review) {
+      res.status(404).json({
+        message: `Review not found`,
+      });
+    } else {
       res.status(200).send({
         message: `Review successfully deleted`,
         review,
-      });
-    } else {
-      res.status(404).json({
-        message: `Review not found`,
       });
     }
   } catch (error) {
@@ -102,6 +116,13 @@ router.put(
     try {
       const { id } = req.params;
       const { userId, propertyId, rating, comment } = req.body;
+      console.log("userId:", userId)
+console.log("propertyId", propertyId)
+console.log("rating", rating)
+console.log("comment", comment)
+      if (!userId || !propertyId || !rating || !comment) {
+        res.status(400).json({ message: `Not found` });
+      } else {
       const review = await updateReviewById(id, {
         userId,
         propertyId,
@@ -117,7 +138,7 @@ router.put(
         res.status(404).json({
           message: `Review not found`,
         });
-      }
+      }}
     } catch (error) {
       next(error);
     }

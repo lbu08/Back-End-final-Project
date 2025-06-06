@@ -12,9 +12,8 @@ const getBookingById = async (id) => {
 
   console.log("booking value in getBookingById", booking);
 
-  if (!booking) {
-  }
-  return null;
+  if (!booking) return null;
+  return booking;
 };
 
 export default getBookingById;

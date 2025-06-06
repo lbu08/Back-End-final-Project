@@ -8,6 +8,7 @@ const deletePropertyById = async (id) => {
   });
   if (!propertyExist || propertyExist.count === 0) {
     return null;
+    return propertyExists;
   }
   const property = await prisma.property.deleteMany({
     where: { id },

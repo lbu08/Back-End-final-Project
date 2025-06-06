@@ -11,6 +11,18 @@ import notFoundErrorHandler from "../middleware/notFoundErrorHandler.js";
 
 const router = Router();
 
+router.get("/", async (req, res, next) => {
+  try {
+    const { username, email } = req.query;
+    console.log("username", username);
+    console.log("email", email);
+    const users = await getUsers(username, email);
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get(
   "/:id/bookings",
   async (req, res, next) => {
@@ -41,23 +53,21 @@ router.get(
   notFoundErrorHandler
 );
 
-router.get("/", async (req, res, next) => {
-  try {
-    const { username, email, name } = req.query;
-    console.log("username", username);
-    console.log("email", email);
-    console.log("name", name);
-    const users = await getUsers(username, email, name);
-    res.json(users);
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.post("/", authMiddleware, async (req, res, next) => {
   try {
     const { username, password, name, email, phoneNumber, profilePicture } =
       req.body;
+    if (
+      !username ||
+      !password ||
+      !name ||
+      !email ||
+      !phoneNumber ||
+      !profilePicture
+    ) {
+      res.status(400).json({ message: `Bad request` });
+    } else {
+
     const newUser = await createUser(
       username,
       password,
@@ -66,7 +76,14 @@ router.post("/", authMiddleware, async (req, res, next) => {
       phoneNumber,
       profilePicture
     );
-    res.status(201).json(newUser);
+
+    if (!newUser) {
+      res
+        .status(404)
+        .json({ message: `Something went wrong, new user is not created!` });
+    } else {
+      res.status(201).json(newUser);
+    }}
   } catch (error) {
     next(error);
   }

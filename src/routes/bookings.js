@@ -5,11 +5,22 @@ import getBookingById from "../services/bookings/getBookingById.js";
 import deleteBookingById from "../services/bookings/deleteBooking.js";
 import updateBookingById from "../services/bookings/updateBookingById.js";
 import getBookingProperties from "../services/bookings/getBookingProperties.js";
-//import getBookingByUser from "../services/bookings/getBookingByUser.js";
 import authMiddleware from "../middleware/auth.js";
 import notFoundErrorHandler from "../middleware/notFoundErrorHandler.js";
 
 const router = Router();
+
+router.get("/", async (req, res, next) => {
+  try {
+    const { userId } = req.query;
+   // const userId =req.query.userId;
+    console.log("userId:", userId);
+    const bookings = await getBookings(userId);
+    res.json(bookings);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.get(
   "/:id/properties",
@@ -26,33 +37,6 @@ router.get(
   notFoundErrorHandler
 );
 
-// router.get(
-//   "/:id/users",
-//   async (req, res, next) => {
-//     try {
-//       const { id } = req.params;
-//       const bookingByUser = await getBookingByUser(id);
-
-//       res.status(200).json(bookingByUser);
-//     } catch (error) {
-//       next(error);
-//     }
-//   },
-//   notFoundErrorHandler
-// );
-
-router.get("/", async (req, res, next) => {
-  try {
-    const { userId } = req.query;
-    console.log("location:", location);
-    console.log("pricePerNight:", pricePerNight);
-    const bookings = await getBookings();
-    res.json(bookings);
-  } catch (error) {
-    next(error);
-  }
-});
-
 router.post("/", authMiddleware, async (req, res, next) => {
   try {
     const {
@@ -63,7 +47,18 @@ router.post("/", authMiddleware, async (req, res, next) => {
       numberOfGuests,
       totalPrice,
       bookingStatus,
-    } = req.body;
+      } = req.body;
+    if (
+      !userId ||
+      !propertyId ||
+      !checkinDate ||
+      !checkoutDate ||
+      !numberOfGuests ||
+      !totalPrice ||
+      !bookingStatus
+    ) {
+      res.status(400).json({ message: `Bad request` });
+    } else {
     const newBooking = await createBooking(
       userId,
       propertyId,
@@ -73,7 +68,14 @@ router.post("/", authMiddleware, async (req, res, next) => {
       totalPrice,
       bookingStatus
     );
-    res.status(201).json(newBooking);
+
+    if (!newBooking) {
+      res.status(404).json({
+        message: `Something went wrong, new booking was not created!`,
+      });
+    } else {
+      res.status(201).json(newBooking);
+    }}
   } catch (error) {
     next(error);
   }
@@ -131,8 +133,27 @@ router.put(
         checkoutDate,
         numberOfGuests,
         totalPrice,
-        bookingStatus,
+        bookingStatus
       } = req.body;
+      console.log("userId", userId)
+console.log("propertyId", propertyId)
+console.log("checkinDate", checkinDate)
+console.log("checkoutDate", checkoutDate)
+console.log("numberOfGuests", numberOfGuests)
+console.log("totalPrice", totalPrice)
+console.log("bookingStatus", bookingStatus)
+
+      if (
+        !userId ||
+        !propertyId ||
+        !checkinDate ||
+        !checkoutDate ||
+        !numberOfGuests ||
+        !totalPrice ||
+        !bookingStatus
+      ) {
+        res.status(400).json({ message: `Not found` });
+      } else {
       const booking = await updateBookingById(id, {
         userId,
         propertyId,
@@ -143,15 +164,16 @@ router.put(
         bookingStatus,
       });
 
-      if (booking) {
+      // if (booking) {
         res.status(200).send({
           message: `Booking with id ${id} successfully updated`,
         });
-      } else {
-        res.status(404).json({
-          message: `Booking with id ${id} not found`,
-        });
-      }
+      // } else {
+      //   res.status(404).json({
+      //     message: `Booking with id ${id} not found`,
+      //   });
+      // }
+    }
     } catch (error) {
       next(error);
     }

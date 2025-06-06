@@ -59,6 +59,18 @@
       "maxGuestCount": 6,
       "hostId": "b5678901-23ef-0123-4567-89abcdef0123",
       "rating": 4
+    },
+    {
+      "id": "d7890123-45ab-6789-cdef-0123456789ab",
+      "title": "Modern Loft in Downtown",
+      "description": "Experience the buzz of city life in this stylish and bright loft in the heart of downtown.",
+      "location": "Austin, Texas",
+      "pricePerNight": 120.0,
+      "bedroomCount": 2,
+      "bathRoomCount": 1,
+      "maxGuestCount": 4,
+      "hostId": "e8901234-56cd-7890-abcd-ef0123456789",
+      "rating": 5
     }
   ]
 }

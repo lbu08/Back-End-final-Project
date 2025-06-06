@@ -7,8 +7,7 @@ const createHost = async (
   email,
   phoneNumber,
   profilePicture,
-  aboutMe,
-  listings
+  aboutMe
 ) => {
   const prisma = new PrismaClient();
   const host = await prisma.host.create({
@@ -19,9 +18,7 @@ const createHost = async (
       email,
       phoneNumber,
       profilePicture,
-      aboutMe,
-      listings
-      
+      aboutMe      
     },
   });
 

@@ -10,21 +10,23 @@ import notFoundErrorHandler from "../middleware/notFoundErrorHandler.js";
 
 const router = Router();
 
+router.get("/", async (req, res, next) => {
+  try {
+    const { name } = req.query;
+    console.log("host name", name);
+    const hosts = await getHosts(name);
+    res.json(hosts);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/:id/properties", async (req, res, next) => {
   try {
     const { id } = req.params;
     const hostProperties = await getHostProperties(id);
 
     res.status(200).json(hostProperties);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.get("/", async (req, res, next) => {
-  try {
-    const hosts = await getHosts();
-    res.json(hosts);
   } catch (error) {
     next(error);
   }
@@ -39,9 +41,21 @@ router.post("/", authMiddleware, async (req, res, next) => {
       email,
       phoneNumber,
       profilePicture,
-      aboutMe,
-      listings,
+      aboutMe
+      
     } = req.body;
+    console.log(req.body)
+    if (
+      !username ||
+      !password ||
+      !name ||
+      !email ||
+      !phoneNumber ||
+      !profilePicture ||
+      !aboutMe      
+    ) {
+      res.status(400).json({ message: `Bad request` });
+    } else {
     const newHost = await createHost(
       username,
       password,
@@ -49,10 +63,16 @@ router.post("/", authMiddleware, async (req, res, next) => {
       email,
       phoneNumber,
       profilePicture,
-      aboutMe,
-      listings
+      aboutMe    
     );
-    res.status(201).json(newHost);
+
+    if (!newHost) {
+      res
+        .status(404)
+        .json({ message: `Something went wrong, new host is not created!` });
+    } else {
+      res.status(201).json(newHost);
+    }}
   } catch (error) {
     next(error);
   }

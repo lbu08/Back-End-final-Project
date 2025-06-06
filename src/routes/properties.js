@@ -13,6 +13,15 @@ import notFoundErrorHandler from "../middleware/notFoundErrorHandler.js";
 
 const router = Router();
 
+router.get("/", async (req, res, next) => {
+  try {
+    const properties = await getProperties();
+    res.json(properties);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get(
   "/:id/bookings",
   async (req, res, next) => {
@@ -75,7 +84,9 @@ router.get(
 
 router.get("/", async (req, res, next) => {
   try {
-    const { location, pricePerNight } = req.query;
+    console.log("Full query object:", req.query);
+    const location = req.query.location;
+    const pricePerNight = req.query.pricePerNight;
     console.log("location:", location);
     console.log("pricePerNight:", pricePerNight);
     const properties = await getProperties(location, pricePerNight);
@@ -98,6 +109,19 @@ router.post("/", authMiddleware, async (req, res, next) => {
       maxGuestCount,
       rating,
     } = req.body;
+    if (
+      !hostId ||
+      !title ||
+      !description ||
+      !location ||
+      !pricePerNight ||
+      !bedroomCount ||
+      !bathRoomCount ||
+      !maxGuestCount ||
+      !rating
+    ) {
+      res.status(400).json({ message: `Bad request` });
+    } else {
     const newProperty = await createProperty(
       hostId,
       title,
@@ -109,7 +133,14 @@ router.post("/", authMiddleware, async (req, res, next) => {
       maxGuestCount,
       rating
     );
-    res.status(201).json(newProperty);
+
+    if (!newProperty) {
+      res.status(404).json({
+        message: `Something went wrong, new property was not created!`,
+      });
+    } else {
+      res.status(201).json(newProperty);
+    }}
   } catch (error) {
     next(error);
   }
@@ -137,8 +168,7 @@ router.delete("/:id", authMiddleware, async (req, res, next) => {
 
     if (property) {
       res.status(200).send({
-        message: `Property with id ${id} successfully deleted`,
-        user,
+        message: `Property with id ${id} successfully deleted`
       });
     } else {
       res.status(404).json({
@@ -165,8 +195,21 @@ router.put(
         bedroomCount,
         bathRoomCount,
         maxGuestCount,
-        rating,
+        rating
       } = req.body;
+      if (
+        !hostId ||
+        !title ||
+        !description ||
+        !location ||
+        !pricePerNight ||
+        !bedroomCount ||
+        !bathRoomCount ||
+        !maxGuestCount ||
+        rating
+      ) {
+        res.status(404).json({ message: `Not found` });
+      } else {
       const property = await updatePropertyById(id, {
         hostId,
         title,
@@ -176,8 +219,8 @@ router.put(
         bedroomCount,
         bathRoomCount,
         maxGuestCount,
-        rating,
-      });
+        rating
+      });                                                                                                               
 
       if (property) {
         res.status(200).send({
@@ -187,7 +230,7 @@ router.put(
         res.status(404).json({
           message: `Property with id ${id} not found`,
         });
-      }
+      }}
     } catch (error) {
       next(error);
     }

@@ -37,8 +37,19 @@ router.get(
 router.post("/", authMiddleware, async (req, res, next) => {
   try {
     const { name } = req.body;
+    console.log(req.body)
+    if (!name) {
+      res.status(400).json({ message: `Bad request` });
+    } else {
     const newAmenity = await createAmenity(name);
-    res.status(201).json(newAmenity);
+
+    if (!newAmenity) {
+      res.status(404).json({
+        message: `Something went wrong, new amenity was not created!`,
+      });
+    } else {
+      res.status(201).json(newAmenity);
+    }}
   } catch (error) {
     next(error);
   }

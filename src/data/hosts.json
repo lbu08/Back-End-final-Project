@@ -49,6 +49,16 @@
       "phoneNumber": "+15234567894",
       "profilePicture": "https://example.com/images/paulgreen.jpg",
       "aboutMe": "Engineer by profession, passionate about history. Stay in my vintage-themed home and relive the past."
+    },
+    {
+      "id": "e8901234-56cd-7890-abcd-ef0123456789",
+      "username": "samanthaSky",
+      "password": "skyHigh456",
+      "name": "Samantha Sky",
+      "email": "samantha.sky@email.com",
+      "phoneNumber": "+13125551234",
+      "profilePicture": "https://example.com/images/samanthasky.jpg",
+      "aboutMe": "Creative designer and local guide. I love helping guests discover the best hidden gems in Austin."
     }
   ]
 }
