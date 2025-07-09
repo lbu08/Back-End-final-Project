@@ -1,7 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 //import NotFoundError from "../../errors/notFoundError.js";
 
-const updateBookingById = async (id, updatedBooking) => {
+const updateBookingById = async (id, userId,
+        propertyId,
+        checkinDate,
+        checkoutDate,
+        numberOfGuests,
+        totalPrice,
+        bookingStatus) => {
   const prisma = new PrismaClient();
   const bookingExist = await prisma.booking.findUnique({
     where: { id },
@@ -11,7 +17,13 @@ const updateBookingById = async (id, updatedBooking) => {
   }
   const booking = await prisma.booking.updateMany({
     where: { id },
-    data: updatedBooking,
+    data: {userId,
+        propertyId,
+        checkinDate,
+        checkoutDate,
+        numberOfGuests,
+        totalPrice,
+        bookingStatus},
   });
 
   if (!booking || booking.count === 0) {

@@ -120,15 +120,15 @@ router.put(
 console.log("propertyId", propertyId)
 console.log("rating", rating)
 console.log("comment", comment)
-      if (!userId || !propertyId || !rating || !comment) {
-        res.status(400).json({ message: `Not found` });
+      if (!rating || !comment) {
+        res.status(400).json({ message: `Not data provided` });
       } else {
-      const review = await updateReviewById(id, {
+      const review = await updateReviewById(id, 
         userId,
         propertyId,
         rating,
         comment,
-      });
+      );
 
       if (review) {
         res.status(200).send({

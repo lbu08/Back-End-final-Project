@@ -125,6 +125,7 @@ router.put(
   authMiddleware,
   async (req, res, next) => {
     try {
+      console.log("Hello")
       const { id } = req.params;
       const {
         userId,
@@ -144,8 +145,8 @@ console.log("totalPrice", totalPrice)
 console.log("bookingStatus", bookingStatus)
 
       if (
-        !userId ||
-        !propertyId ||
+        // !userId ||
+        // !propertyId ||
         !checkinDate ||
         !checkoutDate ||
         !numberOfGuests ||
@@ -154,7 +155,7 @@ console.log("bookingStatus", bookingStatus)
       ) {
         res.status(400).json({ message: `Not found` });
       } else {
-      const booking = await updateBookingById(id, {
+      const booking = await updateBookingById(id, 
         userId,
         propertyId,
         checkinDate,
@@ -162,17 +163,17 @@ console.log("bookingStatus", bookingStatus)
         numberOfGuests,
         totalPrice,
         bookingStatus,
-      });
+      );
 
-      // if (booking) {
+      if (booking) {
         res.status(200).send({
           message: `Booking with id ${id} successfully updated`,
         });
-      // } else {
-      //   res.status(404).json({
-      //     message: `Booking with id ${id} not found`,
-      //   });
-      // }
+      } else {
+        res.status(404).json({
+          message: `Booking with id ${id} not found`,
+        });
+      }
     }
     } catch (error) {
       next(error);

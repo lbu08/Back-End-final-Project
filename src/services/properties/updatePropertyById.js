@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const updatePropertyById = async (
   id,
+  hostId,
   title,
   description,
   location,
@@ -10,29 +11,19 @@ const updatePropertyById = async (
   bedroomCount,
   bathRoomCount,
   maxGuestCount,
-  hostId,
   rating
 ) => {
   const prisma = new PrismaClient();
   const propertyExist = await prisma.property.findUnique({
-    where: { id },
-    data: {
-      title,
-      description,
-      location,
-      pricePerNight,
-      bedroomCount,
-      bathRoomCount,
-      maxGuestCount,
-      hostId,
-      rating,
-    },
+    where: { id }
   });
-  if (!propertyExist || propertyExist.count === 0) return null;
-
+  if (!propertyExist || propertyExist.count === 0) {
+    return null;
+  }
   const property = await prisma.property.update({
     where: { id },
     data: {
+      hostId,
       title,
       description,
       location,
@@ -40,8 +31,7 @@ const updatePropertyById = async (
       bedroomCount,
       bathRoomCount,
       maxGuestCount,
-      hostId,
-      rating,
+      rating
     },
   });
 

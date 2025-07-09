@@ -109,6 +109,7 @@ router.post("/", authMiddleware, async (req, res, next) => {
       maxGuestCount,
       rating,
     } = req.body;
+     console.log("POST hetPropertyById hostId:", hostId);
     if (
       !hostId ||
       !title ||
@@ -150,6 +151,9 @@ router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const property = await getPropertyById(id);
+    console.log(id);
+    console.log("getPropertyById function");
+    console.log("id in getPropertyById:", id);
 
     if (!property) {
       res.status(404).json({ message: `Property with id ${id} not found` });
@@ -185,6 +189,7 @@ router.put(
   authMiddleware,
   async (req, res, next) => {
     try {
+      console.log("HELLO PROPERTY ! ! !")
       const { id } = req.params;
       const {
         hostId,
@@ -195,10 +200,10 @@ router.put(
         bedroomCount,
         bathRoomCount,
         maxGuestCount,
-        rating
+        rating,
       } = req.body;
       if (
-        !hostId ||
+        // !hostId ||
         !title ||
         !description ||
         !location ||
@@ -206,11 +211,13 @@ router.put(
         !bedroomCount ||
         !bathRoomCount ||
         !maxGuestCount ||
-        rating
-      ) {
-        res.status(404).json({ message: `Not found` });
+        !rating
+      ) 
+      {
+        res.status(400).json({ message: `Not found` });
       } else {
-      const property = await updatePropertyById(id, {
+      const property = await updatePropertyById(
+        id,
         hostId,
         title,
         description,
@@ -220,7 +227,7 @@ router.put(
         bathRoomCount,
         maxGuestCount,
         rating
-      });                                                                                                               
+      );                                                                                                               
 
       if (property) {
         res.status(200).send({
@@ -230,7 +237,8 @@ router.put(
         res.status(404).json({
           message: `Property with id ${id} not found`,
         });
-      }}
+      }
+    }
     } catch (error) {
       next(error);
     }
