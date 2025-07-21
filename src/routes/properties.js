@@ -7,9 +7,8 @@ import updatePropertyById from "../services/properties/updatePropertyById.js";
 import getPropertyBookings from "../services/properties/getPropertyBookings.js";
 import getPropertyByAmenities from "../services/properties/getPropertyByAmenities.js";
 import getPropertyHost from "../services/properties/getPropertyHost.js";
-//import getPropertyReviews from "..services/properties/getPropertyReviews.js";
 import authMiddleware from "../middleware/auth.js";
-import notFoundErrorHandler from "../middleware/notFoundErrorHandler.js";
+import NotFoundErrorHandler from "../middleware/NotFoundErrorHandler.js";
 
 const router = Router();
 
@@ -34,7 +33,7 @@ router.get(
       next(error);
     }
   },
-  notFoundErrorHandler
+  NotFoundErrorHandler
 );
 
 router.get(
@@ -49,7 +48,7 @@ router.get(
       next(error);
     }
   },
-  notFoundErrorHandler
+  NotFoundErrorHandler
 );
 
 router.get(
@@ -64,29 +63,13 @@ router.get(
       next(error);
     }
   },
-  notFoundErrorHandler
+  NotFoundErrorHandler
 );
-
-// router.get(
-//   "/:id/reviews",
-//   async (req, res, next) => {
-//     try {
-//       const { id } = req.params;
-//       const propertyReviews = await getPropertyReviews(id);
-
-//       res.status(200).json(propertyReviews);
-//     } catch (error) {
-//       next(error);
-//     }
-//   },
-//   notFoundErrorHandler
-// );
 
 router.get("/", async (req, res, next) => {
   try {
     console.log("Full query object:", req.query);
-    const location = req.query.location;
-    const pricePerNight = req.query.pricePerNight;
+    const { location, pricePerNight } = req.query;
     console.log("location:", location);
     console.log("pricePerNight:", pricePerNight);
     const properties = await getProperties(location, pricePerNight);
@@ -243,7 +226,7 @@ router.put(
       next(error);
     }
   },
-  notFoundErrorHandler
+  NotFoundErrorHandler
 );
 
 export default router;
